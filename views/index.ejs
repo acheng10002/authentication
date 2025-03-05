@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title></title>
+  </head>
+  <body>
+    <h1>hello world!</h1>
+    <!-- checks if there is a user defined, if so offers a welcome message, if not
+     show login form 
+     local variables are accessible within the app, even in views, with locals object -->
+    <% if (currentUser) {%>
+      <h1>WELCOME BACK <%= currentUser.username %></h1>
+      <a href="/log-out">LOG OUT</a>
+    <% } else { %>
+      <h1>please log in</h1>
+      <!-- log-in form looks just like sign-up form but it posts to /log-in instead
+      of /sign-up -->
+      <form action="/log-in" method="POST">
+        <label for="username">Username</label>
+        <input id="username" name="username" placeholder="username" type="text" />
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" />
+        <button>Log In</button>
+      </form>
+    <% } %>
+  </body>
+</html>
+
+<!-- User Authentication Choices
+ 1. Session
+ 2. JSON Web Tokens
+ - JWTs and local logins, session-based AUTHENTICATION, i.e. who the user is
+ 3. OAuth
+    a. In-House
+    b. SaaS
+ 4. Other (like OpenID Connect) /Ad-Hoc 
+ - these others, social logins AUTHORIZATION, ie. what the user is allowed to do 
+   or what resources the user has access to 
+   ex. does the user just have authorization to make get requests against the API
+   or greater access
+   scope of access is provided in the access token 
+
+   HTTP client can be anything, i.e. IoT device, desktop, laptop, mobile, etc.
+   HTTP server, i.e. Google, houses the info the client wants to access, update, etc. 
+   going to Google, sends a HTTP GET request to google.com, I want the resources at 
+   at that web page 
+
+   General Header - can be request- or response-related metadata
+                     what is the url I'm requesting?
+                     what type of HTTP method am I using?
+                     response-side, status code of 200
+  when I searched Google, my browser created a request header:
+  - instructions for the server that I'm requesting resources from or trying to modify
+  - what data the request wants
+    browser will say on the client's behalf, in the request header, what kind of data 
+    I accept (HTML, XML, etc.), accept-language, accept-encoding
+  - user agent - what browser is requesting this data
+  server, Google, can set the response header:
+  - instructions to the client that requested the data
+  - content-type: response providing the data type the request header specified (useful 
+    for trying to figure out how to display that data in the browser)
+  - set cookie(in response header) - key-value pairs 
+    1. client makes initial get request against Google server
+    2. Google server tells client that it'd like to set info/cookie about them in their browser:
+    3. Google wants to tell the browser that the client is logged in and reauthentication is
+       not necessary when page is refreshed 
+       set cookie header is in the response header, assigns values 
+    4. now every request that the client makes within this domain (i.e. every GET request 
+       the client does against google.com), browser will take the cookies in set-cookies 
+       HTTP header in the response header and attach them to the request
+    5. cookies in the response headers will be in request headers
+    - server can have authentication logic, checking user and the password
+    - if correct authentically, server sets the cookie in the header of the response object
+    - client will have that cookie
+    - browser attaches the cookie to each following request, and user doesn't need to get 
+      relogged in
+    - cookie itself has an expiration telling browser how long to store that cookie key value 
+      pair within the client
+    - cookies are a great way to keep persistent state within the browser 
+   HTTP is a stateless protocol:
+   - the site forgets all data
+   - server will recognize that the client provided valid credentials 
+   - server will then send a cookie back to the browser so that the browser can remember
+     the user has logged in 
+   - without cookies or Local Storage, every time I refresh the page, state would be lost
+   cookie header (in request header) -
+
+   server-side session - 
+ -->
